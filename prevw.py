@@ -23,29 +23,10 @@ class Particle:
         self.y_vel = 0
 
     def draw(self, win):
-        x = self.x
-        y = self.y
-
-        if 150 > len(self.orbit) > 2:
-            updated_points = (
-                []
-            )
-            for point in self.orbit:
-                x, y = point
-                updated_points.append((x, y))
-
-            pygame.draw.aalines(win, self.color, False, updated_points, 2)
-
-            if len(self.orbit) > 100:
-                self.orbit.pop(0)
-
-        x = self.x
-        y = self.y
-
         pygame.draw.circle(win, self.color, (x, y), self.radius)
 
-        x_int = int(x)
-        y_int = int(y)
+        x_int = int(self.x)
+        y_int = int(self.y)
         self.radius_int = int(self.radius)
 
         gfxdraw.aacircle(win, x_int, y_int, self.radius_int, self.color)
@@ -103,21 +84,6 @@ class Particle:
                 self.y = self.y + self.y_vel * Particle.TIMESTEP
                 other.x = other.x + other.x_vel * Particle.TIMESTEP
                 other.y = other.y + other.y_vel * Particle.TIMESTEP
-
-    def decay(self, other: Self):
-        mv_x1 = self.mass * self.x_vel
-        mv_y1 = self.mass * self.y_vel
-        mv_x2 = other.mass * other.x_vel
-        mv_y2 = other.mass * other.y_vel
-
-        new_x_vel = (mv_x1 + mv_x2) / (self.mass + other.mass)
-        new_y_vel = (mv_y1 + mv_y2) / (self.mass + other.mass)
-
-        self.x_vel = new_x_vel
-        self.y_vel = new_y_vel
-
-        other.x_vel = new_x_vel
-        other.y_vel = new_y_vel
 
     # updates the postion of particles besed on the gravcitational force it is effected by
     def update_position(self, particles):
