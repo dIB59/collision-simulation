@@ -101,16 +101,6 @@ class Particle:
             self.x_vel *= -0.9
         if self.y >= HEIGHT or self.y <= 0:
             self.y_vel *= -0.9
-            # if the particle is still out of bounds after the collision given some tolerance, it will be reset to the a random point in the screen
-        # if self.x >= WIDTH + self.radius or self.x <= -self.radius:
-        #     # Set the speed to 0 AND give it new coordinates
-        #     self.x_vel = 0
-        #     self.x = random.randrange(WIDTH) / 2
-        #     self.y = random.randrange(HEIGHT) / 2
-        # if self.y >= HEIGHT + self.radius or self.y <= -self.radius:
-        #     self.x = random.randrange(WIDTH) / 2
-        #     self.y = random.randrange(HEIGHT) / 2
-        #     self.y_vel = 0
 
         total_fx = total_fy = 0
         for particle in particles:
