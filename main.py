@@ -36,7 +36,7 @@ def main():
     while run:
         # Limits the game to 60fps
         clock.tick(60)
-        WIN.fill((10, 10, 10))
+        WIN.fill((30, 30, 30))
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:

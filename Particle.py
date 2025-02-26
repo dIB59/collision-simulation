@@ -68,9 +68,9 @@ class Particle:
                 other.x_vel = math.cos(theta_reflection) * other.x_vel
                 other.y_vel = math.sin(theta_reflection) * other.y_vel
 
-                difference_vel = math.sqrt((self.x_vel - other.x_vel) ** 2 + (self.y_vel - other.y_vel) ** 2)
+                difference_vel = (self.x_vel - other.x_vel) ** 2 + (self.y_vel - other.y_vel) ** 2
+                if difference_vel < math.sqrt(self.escape_velocity(other)):
 
-                if difference_vel < self.escape_velocity(other):
                     if not self.remove:
                         other.remove = True
 
@@ -106,8 +106,8 @@ class Particle:
         self.x = self.x + self.x_vel * Particle.TIMESTEP
         self.y = self.y + self.y_vel * Particle.TIMESTEP
 
-        self.y_vel = self.y_vel * 0.995
-        self.x_vel = self.x_vel * 0.995
+        self.y_vel = self.y_vel * 0.999
+        self.x_vel = self.x_vel * 0.999
 
         if self.x >= 1000 or self.x <= 0:
             self.x_vel = -self.x_vel
