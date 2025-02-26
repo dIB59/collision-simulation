@@ -22,6 +22,7 @@ class Particle:
         self.id = Particle.number
         self.x_vel = x_vel
         self.y_vel = y_vel
+        self.remove = False
 
         Particle.number += 1
 
@@ -66,11 +67,32 @@ class Particle:
                 self.y_vel = math.sin(theta_reflection) * self.y_vel
                 other.x_vel = math.cos(theta_reflection) * other.x_vel
                 other.y_vel = math.sin(theta_reflection) * other.y_vel
+
+                difference_vel = math.sqrt((self.x_vel - other.x_vel) ** 2 + (self.y_vel - other.y_vel) ** 2)
+
+                if difference_vel < self.escape_velocity(other):
+                    if not self.remove:
+                        other.remove = True
+
+                    self.mass += other.mass
+                    self.radius += other.radius
+                    self.x_vel = (self.x_vel * self.mass + other.x_vel * other.mass) / self.mass
+                    self.y_vel = (self.y_vel * self.mass + other.y_vel * other.mass) / self.mass
+
+                    self.color = (
+                        min(255, (self.color[0] + other.color[0]) // 2 + 1),
+                        min(255, (self.color[1] + other.color[1]) // 2 + 1),
+                        min(255, (self.color[2] + other.color[2]) // 2 + 1)
+                    )
+
                 # Calculate the new position of the particles after the collision
                 self.x = self.x + self.x_vel * Particle.TIMESTEP
                 self.y = self.y + self.y_vel * Particle.TIMESTEP
                 other.x = other.x + other.x_vel * Particle.TIMESTEP
                 other.y = other.y + other.y_vel * Particle.TIMESTEP
+
+    def escape_velocity(self, other: Self) -> float:
+        return math.sqrt(2 * self.G * (self.mass + other.mass) / self.radius)
 
     def update_position(self, particles: Iterator[Self]):
         for particle in particles:
@@ -94,58 +116,8 @@ class Particle:
 
 
 def draw_particle(particle: Particle, win: Surface | SurfaceType):
-    pygame.draw.circle(win, particle.color, (particle.x, particle.y), particle.radius)
     x_int = int(particle.x)
     y_int = int(particle.y)
     radius_int = int(particle.radius)
-
     gfxdraw.aacircle(win, x_int, y_int, radius_int, particle.color)
     gfxdraw.filled_circle(win, x_int, y_int, radius_int, particle.color)
-
-
-def main():
-    pygame.init()
-
-    WIDTH, HEIGHT = 1000, 1000
-
-    WIN = pygame.display.set_mode((WIDTH, HEIGHT), pygame.RESIZABLE)
-    pygame.display.set_caption("A particle simulation")
-
-    run = True
-    clock = pygame.time.Clock()
-
-    particle_lst = dict()
-    p1 = Particle(500, 500, 10, (255, 255, 255), 10 ** 12, 1, 1)
-    p = Particle(700, 700, 10, (255, 255, 255), 10 ** 12, -1, -1)
-    p2 = Particle(300, 300, 10, (255, 255, 255), 10 ** 12, 1, 1)
-    p3 = Particle(100, 100, 10, (255, 255, 255), 10 ** 12, -1, -1)
-    p4 = Particle(900, 900, 10, (255, 255, 255), 10 ** 12, 1, 1)
-
-
-    particle_lst[p1.id] = p1
-    particle_lst[p.id] = p
-    particle_lst[p2.id] = p2
-    particle_lst[p3.id] = p3
-    particle_lst[p4.id] = p4
-
-
-    while run:
-        # Limits the game to 60fps
-        clock.tick(60)
-        WIN.fill((0, 0, 0))
-
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                run = False
-
-        for particle in particle_lst.values():
-            draw_particle(particle, WIN)
-            particle.update_position(particle_lst.values().__iter__())
-
-        pygame.display.update()
-
-    pygame.quit()
-
-
-if __name__ == '__main__':
-    main()
