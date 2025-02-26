@@ -1,6 +1,5 @@
 import math
 
-import pygame
 from pygame import gfxdraw, SurfaceType, Surface
 from typing import Self, Iterator
 
