@@ -24,6 +24,7 @@ class Particle:
         self.remove = False
 
         Particle.number += 1
+        print(f"Particle {self.id} created")
 
     def attraction(self: Self, other: Self):
         other_x, other_y = other.x, other.y
@@ -108,9 +109,9 @@ class Particle:
         self.y_vel = self.y_vel * 0.999
         self.x_vel = self.x_vel * 0.999
 
-        if self.x >= 1000 or self.x <= 0:
+        if self.x >= 800 or self.x <= 0:
             self.x_vel = -self.x_vel
-        if self.y >= 1000 or self.y <= 0:
+        if self.y >= 800 or self.y <= 0:
             self.y_vel = -self.y_vel
 
 

@@ -12,7 +12,7 @@ def random_color():
 def main():
     pygame.init()
 
-    WIDTH, HEIGHT = 1000, 1000
+    WIDTH, HEIGHT = 800, 800
 
     WIN = pygame.display.set_mode((WIDTH, HEIGHT), pygame.RESIZABLE)
     pygame.display.set_caption("A particle simulation")
